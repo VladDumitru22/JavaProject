@@ -8,20 +8,20 @@ import com.chatapp.structs.Message;
 import com.private_message.structs.PrivateMessage;
 
 public class ClientPeer {
-    private final String sender;
+    private final String username;
     private final Socket socket;
     private final ObjectOutputStream objectStream;
     
 
-    public ClientPeer(String sender, Socket socket) throws IOException {
-        this.sender = sender;
+    public ClientPeer(String username, Socket socket) throws IOException {
+        this.username = username;
         this.socket = socket;
         this.objectStream = new ObjectOutputStream(socket.getOutputStream());
     }
 
     public void sendMessage(String message) {
         try{
-            Message _msg = new Message(sender, message);
+            Message _msg = new Message(username, message);
             objectStream.writeObject(_msg);
             objectStream.flush();
         }catch(IOException _ioe){
@@ -31,7 +31,7 @@ public class ClientPeer {
 
     public void sendMessage(String message, String recipient) {
         try {
-            PrivateMessage _pvmsg = new PrivateMessage(recipient, sender, message);
+            PrivateMessage _pvmsg = new PrivateMessage(recipient, username, message);
             objectStream.writeObject(_pvmsg);
             objectStream.flush();
         } catch (IOException _ioe) {
@@ -53,7 +53,7 @@ public class ClientPeer {
     }
 
     public String getSender() {
-        return sender;
+        return username;
     }
 
     public Socket getSocket() {
