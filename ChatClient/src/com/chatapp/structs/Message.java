@@ -1,6 +1,6 @@
 package com.chatapp.structs;
 
-public final class Message {
+public class Message {
     private final String sender;
     private final String content;
 
