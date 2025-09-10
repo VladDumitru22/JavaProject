@@ -1,46 +1,41 @@
 package com.chatapp.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Scanner;
 
 
 public class TextClient {
-    public static void main(String[] args) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
-        
-        System.out.print("Enter your username: ");
-        String username = reader.readLine();
+public static void main(String[] args) {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter your username: ");
+            String username = scanner.nextLine();
 
-        Socket clientSocket = new Socket("127.0.0.1", 9000);
+            Socket socket = new Socket("127.0.0.1", 9000);
+            ClientPeer client = new ClientPeer(username, socket);
+            client.start();
 
-        ClientPeer client = new ClientPeer(username, clientSocket);
+            while (true) {
+                String line = scanner.nextLine();
+                if (line.equals("/q")) break;
 
-        System.out.println("Type /q to quit, or /w <user> <message> for private messages.");
-        String line;
-        while((line = reader.readLine()) != null) {
-            if(line.equals("/q")) {
-                System.out.println("Exiting...");
-                break;                
-            }
-            
-            if(line.startsWith("/w")) {
-                String[] parts = line.split(" ", 3);
-                if(parts.length >= 3) {
-                    String recipient = parts[1].trim();
-                    String content = parts[2].trim();
-                    client.sendMessage(content, recipient);
+                if (line.startsWith("/w ")) {
+                    String[] parts = line.split(" ", 3);
+                    if (parts.length == 3) {
+                        client.sendMessage(parts[2], parts[1]);
+                    } else {
+                        System.out.println("Invalid private message format: /w <recipient> <message>");
+                    }
                 } else {
-                    System.out.println("Invalid private message format. Use: /w <user> <message>");
+                    client.sendMessage(line);
                 }
-            } else {
-                client.sendMessage(line.trim());
             }
-        }
-        client.close();
-        } catch (IOException _ioe) {
-            System.err.println("An I/O error occurred: " + _ioe.getMessage());
+
+            client.close();
+            scanner.close();
+        } catch (IOException e) {
+            System.out.println("Connection error: " + e.getMessage());
         }
     }
 }
