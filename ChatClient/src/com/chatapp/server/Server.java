@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import com.chatapp.server.config.ServerConfig;
 import com.chatapp.server.exceptions.*;
 import com.chatapp.structs.Message;
-import com.private_message.structs.PrivateMessage;
+import com.chatapp.structs.PrivateMessage;
 
 public class Server {
     private final int port;
@@ -45,12 +45,16 @@ public class Server {
     }
 
     public synchronized void dispatch(Message msg, ServerPeer senderPeer) {
-        for (ServerPeer peer : clients) {
-            if (msg instanceof PrivateMessage pm) {
-                if (peer.getUsername().equals(pm.getRecipient()) || peer.getUsername().equals(pm.getSender())) {
+        if (msg instanceof PrivateMessage pm) {
+            for (ServerPeer peer : clients) {
+                String peerName = peer.getUsername();
+                if (peerName != null &&
+                (peerName.equals(pm.getRecipient()) || peerName.equals(pm.getSender()))) {
                     peer.sendMessage(pm);
                 }
-            } else {
+            }
+        } else {
+            for (ServerPeer peer : clients) {
                 peer.sendMessage(msg);
             }
         }

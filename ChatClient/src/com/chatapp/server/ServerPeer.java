@@ -21,11 +21,16 @@ public class ServerPeer extends Thread{
         this.inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
+    @Override
     public void run() {
         try {
             while (true) {
                 Object obj = inputStream.readObject();
                 if (obj instanceof Message msg) {
+                    if (msg.getContent().equals("__init__")) {
+                        this.username = msg.getSender();
+                        continue;
+                    }
                     this.username = msg.getSender();
                     server.dispatch(msg, this);
                 }

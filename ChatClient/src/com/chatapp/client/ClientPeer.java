@@ -9,7 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import com.chatapp.structs.Message;
-import com.private_message.structs.PrivateMessage;
+import com.chatapp.structs.PrivateMessage;
 
 public class ClientPeer extends Thread {
     private String username;
@@ -23,6 +23,10 @@ public class ClientPeer extends Thread {
         this.socket = socket;
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
+
+        Message initMsg = new Message(username, "__init__");
+        outputStream.writeObject(initMsg);
+        outputStream.flush();
     }
 
     public void sendMessage(String message) {

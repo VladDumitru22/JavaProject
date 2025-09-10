@@ -1,6 +1,4 @@
-package com.private_message.structs;
-
-import com.chatapp.structs.Message;
+package com.chatapp.structs;
 
 public final class PrivateMessage extends Message{
     private final String recipient;

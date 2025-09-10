@@ -1,7 +1,5 @@
 package com.chatapp.structs;
 
-import com.private_message.structs.PrivateMessage;
-
 import java.io.IOException;
 
 import com.chatapp.server.exceptions.*;
