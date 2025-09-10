@@ -88,7 +88,13 @@ This project highlights several **core Java programming techniques**:
 From the `ChatClient` root directory:
 
 ``` bash
-javac -d bin src/com/chatapp/**/*.java
+javac -d bin src/com/chatapp/server/config/*.java \
+src/com/chatapp/server/exceptions/*.java \
+src/com/chatapp/server/*.java \
+src/com/chatapp/structs/*.java \
+src/com/chatapp/client/*.java \
+src/com/chatapp/client/gui/*.java
+
 ```
 
 ### 2. Start the Server
