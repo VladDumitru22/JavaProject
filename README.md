@@ -41,10 +41,10 @@ programming, multithreading, exception handling, and GUI development**.
     │   │   │   └── UnknownKeyException.java
     │   │   ├── Server.java
     │   │   └── ServerPeer.java
-    │   ├── structs/
-    │   │   ├── Main.java
-    │   │   ├── Message.java
-    │   └──private_message/structs/PrivateMessage.java
+    │   └── structs/
+    │      ├── Main.java
+    │      ├── Message.java
+    │      └──PrivateMessage.java
     └── server.conf
 
 ## Key Programming Concepts Demonstrated 🛠️
