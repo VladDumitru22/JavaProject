@@ -1,13 +1,13 @@
-# Java Chat Application
-
-## Overview
+# Java Chat Application 💬
+ 
+## Overview 📝
 
 This project is a **Java-based Chat Application** that supports both
 **GUI** and **Text-based clients**, allowing multiple users to connect
 to a server and exchange messages in real time. The project was designed as a practical exercise in **network
 programming, multithreading, exception handling, and GUI development**.
 
-## Features
+## Features 🖥️
 
 -   **Client-Server Architecture**: Users connect to a central server
     which manages message delivery.
@@ -23,7 +23,7 @@ programming, multithreading, exception handling, and GUI development**.
 -   **Private Messaging**: Supports structured private messages between
     clients.
 
-## Project Structure
+## Project Structure 📂
 
     ChatClient/
     ├── src/com/chatapp/
@@ -47,7 +47,7 @@ programming, multithreading, exception handling, and GUI development**.
     │   └──private_message/structs/PrivateMessage.java
     └── server.conf
 
-## Key Programming Concepts Demonstrated
+## Key Programming Concepts Demonstrated 🛠️
 
 This project highlights several **core Java programming techniques**:
 
@@ -81,7 +81,7 @@ This project highlights several **core Java programming techniques**:
     -   Modular design with packages for server, client, exceptions, and
         shared data structures.
 
-## How to Run
+## How to Run ▶️
 
 ### 1. Compile the Project
 
@@ -117,13 +117,13 @@ For text-based client:
 java -cp bin com.chatapp.client.TextClient localhost 9000 User2
 ```
 
-### 4. Chat!
+### 4. Chat! 💬
 
 -   Multiple clients can connect to the server.
 -   Messages are broadcasted to all connected users.
 -   Private messages can be sent with the proper structure.
 
-## Learning Outcomes
+## Learning Outcomes 🎓
 
 By completing this project, the following skills were developed and
 demonstrated: - Building a **multithreaded client-server application**
