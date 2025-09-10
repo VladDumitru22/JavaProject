@@ -1,55 +1,53 @@
 package com.chatapp.server;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.chatapp.structs.Message;
-import com.private_message.structs.PrivateMessage;
 
-public class ServerPeer {
+public class ServerPeer extends Thread{
+    private final Server server;
     private final Socket socket;
+    private final ObjectOutputStream outputStream;
+    private final ObjectInputStream inputStream;
+    private String username;
 
-    public ServerPeer(Socket socket) throws IOException {
+    public ServerPeer(Server server, Socket socket) throws IOException {
+        this.server = server;
         this.socket = socket;
+        this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+        this.inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
     public void run() {
-        try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+        try {
             while (true) {
-                try {
-                    Object obj = in.readObject();
-                    if (obj instanceof Message) {
-                        Message msg = (Message) obj;
-                        System.out.println(msg.toString());
-                            
-                        if (msg instanceof PrivateMessage) {
-                            PrivateMessage pvmsg = (PrivateMessage) msg;
-                            System.out.println("Recipient: " + pvmsg.getRecipient());
-                        }
-                    } else {
-                        System.out.println("Unknown object type received");
-                    }
-                } catch (EOFException _eof) {
-                    System.out.println("Client disconnected.");
-                    break;
-                } catch (ClassNotFoundException _cnfe) {
-                    System.err.println("Received unknown object type: " + _cnfe.getMessage());
+                Object obj = inputStream.readObject();
+                if (obj instanceof Message msg) {
+                    this.username = msg.getSender();
+                    server.dispatch(msg, this);
                 }
             }
-        } catch (IOException _ioe) {
-            System.err.println("I/O error: " + _ioe.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Client disconnected: " + username);
         } finally {
-            try {
-                socket.close();
-            } catch (IOException _ioe) {
-                System.err.println("Failed to close socket: " + _ioe.getMessage());
-            }
+            server.removeClient(this);
+            try { socket.close(); } catch (IOException e) {}
         }
     }
 
-    public Socket getSocket() {
-        return socket;
+    public synchronized void sendMessage(Message msg) {
+        try {
+            outputStream.writeObject(msg);
+            outputStream.flush();
+        } catch (IOException e) {
+            System.out.println("Unable to send message to " + username + ": " + e.getMessage());
+        }
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
